@@ -55,13 +55,14 @@ public:
 };
 
 class Graph {
-    int score;
+    int score, flagMove, flagGame;
     random_device rd;
     mt19937 gen;
     uniform_int_distribution<> dis;
     uniform_int_distribution<> disRotate;
     Shape* lastShape;
     array<array<pair<bool, int>, HEIGHT>, WIDTH> occupyState;
+    bool flagNew;
 public:
     Graph();
     ~Graph();
@@ -73,6 +74,7 @@ public:
     void show(Shape* s);
     void check();
     void handleHit();
+    void run();
 };
 
 void setRotate(Graph* g, Shape* s);

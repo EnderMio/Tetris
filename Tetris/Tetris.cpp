@@ -32,7 +32,7 @@ vector<int> Shape::getNowPoints(int v) {
     return nowPoints;
 }
 
-Graph::Graph() : score{ 0 }, gen{ mt19937(rd()) }, dis{ uniform_int_distribution<>(0, SHAPENUM - 1) }, disRotate{ uniform_int_distribution<>(0, 3) }, lastShape{ nullptr } {
+Graph::Graph() : score{ 0 }, gen{ mt19937(rd()) }, dis{ uniform_int_distribution<>(0, SHAPENUM - 1) }, disRotate{ uniform_int_distribution<>(0, 3) }, lastShape{ nullptr }, flagNew{ true }, flagMove{ 0 }, flagGame{ 0 } {
     initgraph(WIDTH * LENGTH, HEIGHT * LENGTH);
     setbkcolor(WHITE);
     for (auto i{ 0 }; i < WIDTH; i++)
@@ -131,6 +131,28 @@ void Graph::handleHit() {
             }
             getch();
             break;
+        }
+    }
+}
+void Graph::run() {
+    while (!flagGame) {
+        check();
+        if (kbhit())
+            handleHit();
+        if (flagNew) {
+            flagNew = false;
+            while (flagGame = addShape())
+                if (flagGame == 1) break;
+        }
+        delay_fps(FPS);
+        cleardevice();
+        auto last = getLastShape();
+        show(last);
+        if (moveShape(last, 0, 1));
+        else if (++flagMove >= 3) {
+            flagMove = 0;
+            flagNew = true;
+            toOccupy(last);
         }
     }
 }
