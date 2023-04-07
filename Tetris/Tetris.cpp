@@ -40,7 +40,7 @@ Graph::Graph() : score{ 0 }, gen{ mt19937(rd()) }, dis{ uniform_int_distribution
             occupyState[i][j].first = false;
 }
 Graph::~Graph() {
-    system("pause");
+    getch();
     closegraph();
 }
 void Graph::toOccupy(Shape* s) {
@@ -119,10 +119,19 @@ void Graph::check() {
 void Graph::handleHit() {
     char c = getch();
     switch (c) {
-    case 'a': moveShape(lastShape, -1, 0); break;
-    case 'd': moveShape(lastShape, 1, 0); break;
-    case 's': moveShape(lastShape, 0, 1); break;
-    case 'w': setRotate(this, lastShape); break;
+        case 'a': moveShape(lastShape, -1, 0); break;
+        case 'd': moveShape(lastShape, 1, 0); break;
+        case 's': while (moveShape(lastShape, 0, 1)); break;
+        case 'w': setRotate(this, lastShape); break;
+        case ' ': {
+            while (true) {
+                if (!kbhit())
+                    break;
+                getch();
+            }
+            getch();
+            break;
+        }
     }
 }
 

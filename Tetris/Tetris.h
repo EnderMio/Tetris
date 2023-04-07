@@ -1,7 +1,6 @@
 #pragma once
 #include<graphics.h>
 #include<conio.h>
-#include<cstdlib>
 #include<vector>
 #include<array>
 #include<random>
@@ -18,10 +17,10 @@ class Graph;
 class Shape {
 public:
     int getColor() { return color; }
+    vector<int> getNowPoints(int v = 0);
     friend void setRotate(Graph*, Shape*);
     void move(int x, int y);
     void setHeight(int y) { this->y = y; }
-    vector<int> getNowPoints(int v = 0);
 protected:
     int x, y, color, shape, rotate;
     Shape(int x, int y, int color, int shape, int r) : x{ x }, y{ y }, color{ color }, shape{ shape }, rotate{ r } { }
