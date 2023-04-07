@@ -47,7 +47,7 @@ Graph::~Graph() {
 void Graph::toOccupy(Shape* s) {
     auto points = s->getNowPoints();
     for (auto i{ 0 }; i < 4 * 2; i += 2)
-        if (points[i] >= 0 && points[i] < WIDTH && points[i + 1] >= 0 && points[i + 1] < HEIGHT)
+        if (!isOccupy(points[i], points[i + 1]))
             occupyState[points[i]][points[i + 1]] = make_pair(true, s->getColor());
 }
 bool Graph::moveShape(Shape* s, int x, int y) {
@@ -65,11 +65,11 @@ int Graph::addShape() {
     switch (dis(gen)) {
         case 0: s = new Square(WIDTH / 4 * 2, 0, rotate); break;
         case 1: s = new Straight(WIDTH / 4 * 2, 1, rotate); break;
-        case 2: s = new JShape(WIDTH / 4 * 2, 7, rotate); break;
-        case 3: s = new TShape(WIDTH / 4 * 2, 7, rotate); break;
-        case 4: s = new ZShape(WIDTH / 4 * 2, 7, rotate); break;
-        case 5: s = new SShape(WIDTH / 4 * 2, 7, rotate); break;
-        case 6: s = new LShape(WIDTH / 4 * 2, 7, rotate); break;
+        case 2: s = new JShape(WIDTH / 4 * 2, 3, rotate); break;
+        case 3: s = new TShape(WIDTH / 4 * 2, 3, rotate); break;
+        case 4: s = new ZShape(WIDTH / 4 * 2, 3, rotate); break;
+        case 5: s = new SShape(WIDTH / 4 * 2, 3, rotate); break;
+        case 6: s = new LShape(WIDTH / 4 * 2, 3, rotate); break;
     default: s = nullptr;
     }
     auto points = s->getNowPoints();

@@ -7,7 +7,7 @@
 #include"Matrix.h"
 using std::vector, std::array, std::random_device, std::mt19937, std::uniform_int_distribution, std::pair, std::make_pair;
 
-static const auto WIDTH{ 30 }, HEIGHT{ 40 }, FPS{ 5 }, LENGTH{ 10 }, SHAPENUM{ 7 };
+static const auto WIDTH{ 30 }, HEIGHT{ 40 }, FPS{ 2 }, LENGTH{ 10 }, SHAPENUM{ 7 };
 static const int normalOffset[10] = { -1, -1, -1, 1, 1, 1, 1, -1, -1, -1 };
 extern int offset[4][SHAPENUM][8];
 
