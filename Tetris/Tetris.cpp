@@ -40,6 +40,7 @@ Graph::Graph() : score{ 0 }, gen{ mt19937(rd()) }, dis{ uniform_int_distribution
             occupyState[i][j].first = false;
 }
 Graph::~Graph() {
+    delete lastShape;
     getch();
     closegraph();
 }

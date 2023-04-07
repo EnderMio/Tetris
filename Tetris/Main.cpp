@@ -3,8 +3,7 @@
 
 int main() {
     getRotateOffset();
-    Graph* g = new Graph;
-    g->run();
-    delete g;
+    Graph g;
+    g.run();
     return 0;
 }
