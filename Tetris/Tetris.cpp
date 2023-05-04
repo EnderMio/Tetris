@@ -10,6 +10,20 @@ int offset[4][SHAPENUM][8] = { {
     { 0, -2, 0, 0, -2, 0, -4, 0 }//L
 } };
 
+int Shape::numTotal = 0;
+
+Shape::Shape(int x, int y, int color, int shape, int r) : x{ x }, y{ y }, color{ color }, shape{ shape }, rotate{ r } {
+    id = numTotal++;
+    shapeList.insert(make_pair(id, this));
+    isSolid = false;
+    speed = 1;
+}
+
+Shape::~Shape() {
+    shapeList.erase(id);
+    xyprintf(WIDTH * LENGTH / 2, 0, "Num: %d", shapeList.size());
+}
+
 void getRotateOffset() {
     Matrix m(0, -1, 1, 0), t(1, 0, 0, 1);
     for (auto j{ 1 }; j < 4; j++) {
@@ -43,6 +57,35 @@ Graph::~Graph() {
     delete lastShape;
     getch();
     closegraph();
+}
+void Graph::loadSettings() {
+    fs::path difficultyFilePath = "difficulty.txt";
+    fs::path optionFilePath = "option.txt";
+    if (!fs::exists(difficultyFilePath)) {
+        std::ofstream difficultyFile(difficultyFilePath);
+        difficultyFile << 1 << endl << 1;
+        difficultyFile.close();
+    }
+    if (!fs::exists(optionFilePath)) {
+        std::ofstream optionFile(optionFilePath);
+        optionFile << 0 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 1 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 2 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 3 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 4 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 5 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile << 6 << ' ' << 1 << ' ' << 1 << endl;
+        optionFile.close();
+    }
+    std::ifstream difficultyFile(difficultyFilePath);
+    difficultyFile >> difficulty >> speedBase;
+    difficultyFile.close();
+    std::ifstream optionFile(optionFilePath);
+    int id, isSolid, speed;
+    while (optionFile >> id >> isSolid >> speed) {
+        shapeList[id]->isSolid = isSolid;
+        shapeList[id]->speed = speed;
+    }
 }
 void Graph::toOccupy(Shape* s) {
     auto points = s->getNowPoints();
@@ -78,7 +121,10 @@ int Graph::addShape() {
             res = 1 + (points[i + 1] < 0);
         break;
     }
-    if (!res) lastShape = s;
+    if (!res) {
+        delete lastShape;
+        lastShape = s;
+    }
     return res;
 }
 void Graph::show(Shape* s) {

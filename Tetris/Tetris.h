@@ -4,8 +4,13 @@
 #include<vector>
 #include<array>
 #include<random>
+#include<map>
+#include<fstream>
+#include<filesystem>
 #include"Matrix.h"
-using std::vector, std::array, std::random_device, std::mt19937, std::uniform_int_distribution, std::pair, std::make_pair;
+using std::vector, std::array, std::random_device, std::mt19937, std::uniform_int_distribution, std::pair, std::make_pair, std::map, std::fstream, std::endl;
+
+namespace fs = std::filesystem;
 
 static const auto WIDTH{ 30 }, HEIGHT{ 40 }, FPS{ 2 }, LENGTH{ 10 }, SHAPENUM{ 7 };
 static const int normalOffset[10] = { -1, -1, -1, 1, 1, 1, 1, -1, -1, -1 };
@@ -18,12 +23,16 @@ class Shape {
 public:
     int getColor() { return color; }
     vector<int> getNowPoints(int v = 0);
+    map<int, Shape*> shapeList;
     friend void setRotate(Graph*, Shape*);
     void move(int x, int y);
     void setHeight(int y) { this->y = y; }
+    ~Shape();
 protected:
-    int x, y, color, shape, rotate;
-    Shape(int x, int y, int color, int shape, int r) : x{ x }, y{ y }, color{ color }, shape{ shape }, rotate{ r } { }
+    int x, y, color, shape, rotate, id, speed;
+    bool isSolid;
+    static int numTotal;
+    Shape(int x, int y, int color, int shape, int r);
 };
 class Square : public Shape {
 public:
@@ -55,7 +64,7 @@ public:
 };
 
 class Graph {
-    int score, flagMove, flagGame;
+    int score, flagMove, flagGame, difficulty, speedBase;
     random_device rd;
     mt19937 gen;
     uniform_int_distribution<> dis;
@@ -75,6 +84,7 @@ public:
     void check();
     void handleHit();
     void run();
+    void loadSettings();
 };
 
 void setRotate(Graph* g, Shape* s);
