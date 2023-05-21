@@ -39,6 +39,16 @@ void Shape::move(int x, int y) {
     this->x += x * 2;
     this->y += y * 2;
 }
+
+Shape& Shape::operator++(int dummy) {
+    this->move(1, 0);
+    return *this;
+}
+Shape& Shape::operator--(int dummy) {
+    this->move(-1, 0);
+    return *this;
+}
+
 vector<int> Shape::getNowPoints(int v) {
     vector<int> nowPoints;
     for (auto i{ 0 }; i < 4 * 2; i++)
@@ -113,7 +123,7 @@ int Graph::addShape() {
         case 4: s = new ZShape(WIDTH / 4 * 2, 3, rotate); break;
         case 5: s = new SShape(WIDTH / 4 * 2, 3, rotate); break;
         case 6: s = new LShape(WIDTH / 4 * 2, 3, rotate); break;
-    default: s = nullptr;
+        default: s = nullptr;
     }
     auto points = s->getNowPoints();
     for (auto i{ 0 }; i < 4 * 2; i += 2) {
@@ -194,7 +204,8 @@ void Graph::run() {
         delay_fps(FPS);
         cleardevice();
         auto last = getLastShape();
-        show(last);
+        // show(last);
+        (*this) << last;
         if (moveShape(last, 0, 1));
         else if (++flagMove >= 3) {
             flagMove = 0;
@@ -210,4 +221,8 @@ void setRotate(Graph* g, Shape* s) {
         if (g->isOccupy(p[i], p[i + 1]))
             return;
     s->rotate = (s->rotate + 1) % 4;
+}
+Graph& operator<<(Graph& g, const Shape& s) {
+    g.show(s);
+    return g;
 }

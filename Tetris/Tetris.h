@@ -28,6 +28,8 @@ public:
     void move(int x, int y);
     void setHeight(int y) { this->y = y; }
     ~Shape();
+    Shape& operator++(int dummy = 0);
+    Shape& operator--(int dummy = 0);
 protected:
     int x, y, color, shape, rotate, id, speed;
     bool isSolid;
@@ -85,6 +87,8 @@ public:
     void handleHit();
     void run();
     void loadSettings();
+    friend Graph& operator<<(Graph& g, const Shape& s);
 };
 
 void setRotate(Graph* g, Shape* s);
+Graph& operator<<(Graph& g, const Shape& s);
